@@ -17,18 +17,62 @@ accountNumber(acno){
  return acno in this.accountingDetails?'valid Account':'Invalid Account'
 }
 //authenticate the account
-accountAutho(username,password){
-    return username&&password in this.accountingDetails?'valid username and password':'invalid password or username'
+accountAutho(accno,pass){
+    for(let i in this.accountingDetails){
+
+        if(this.accountingDetails[i].acno==accno && this.accountingDetails[i].password==pass){
+            console.log('Authentication success');
+            return
+        }
+            console.log('Authentication failed');
+            break
+    }
 }
 
 //check the balance
+balance(accno,pass){
+        if(accno in this.accountingDetails && this.accountingDetails[accno].password == pass){
+            console.log(this.accountingDetails[accno].balance);
+        }
+        else{
+            console.log('Account not found');
+        }
+        
+    }
 
 //fund transfer
+trans(acc1,acc2,fund,pass){
+    if(acc1 in this.accountingDetails && acc2 in this.accountingDetails && this.accountingDetails[acc1].password == pass){
+        if(this.accountingDetails[acc1].balance>=fund){
+        this.accountingDetails[acc1].balance -= fund
+        this.accountingDetails[acc2].balance += fund
+        console.log(`Amount of ${fund} is transfered from ${acc1} to ${acc2}`);
+        console.log(this.accountingDetails);
+        }
+
+        else{
+            console.log(`Insufficient balance`);
+        }
+        
+    }
+
+    else{
+        console.log(`Account number not found`);
+    }
+   
 }
 
+
+}
 //object
 const obj = new Bank()
 console.log(obj.accountNumber(1000));
+console.log('------------------------');
 
-const obj1 = new Bank()
-console.log(obj.accountAutho('userone'));
+obj.accountAutho(1000,'userone')
+console.log('------------------------');
+
+obj.balance(1001,'usertwo')
+console.log('------------------------');
+
+obj.trans(1000,1003,3000,'userone')
